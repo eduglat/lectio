@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es-419">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LECTIO: aprende a leer en español con Luna</title>
+<meta name="description" content="App para que niños y niñas de 4 a 7 años aprendan a leer en español jugando con Luna: sílabas, palabras y frases. Sin publicidad y sin internet.">
+<meta name="theme-color" content="#3e5f4a">
+<link rel="icon" type="image/png" href="img/icono-192.png">
+<link rel="apple-touch-icon" href="img/icono-192.png">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_419">
+<meta property="og:title" content="LECTIO: aprende a leer en español con Luna">
+<meta property="og:description" content="Para niños y niñas de 4 a 7 años: de las vocales a leer palabras y frases, a su ritmo. Sin publicidad.">
+<meta property="og:image" content="https://eduglat.github.io/lectio/img/icono-512.png">
+<meta property="og:url" content="https://eduglat.github.io/lectio/">
+<link rel="preload" href="fuentes/lectio-letra-bold.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face { font-family:"Lectio Letra"; src:url("fuentes/lectio-letra-regular.woff2") format("woff2"); font-weight:400; font-display:swap; }
+@font-face { font-family:"Lectio Letra"; src:url("fuentes/lectio-letra-bold.woff2") format("woff2"); font-weight:700; font-display:swap; }
+:root {
+  color-scheme: light;
+  --arena:#f5e6d3; --crema:#faf3e8; --blanco:#fffdf8;
+  --texto:#3f2d24; --suave:#6b5548;
+  --musgo:#3e5f4a; --bosque:#4a7c59; --pasto:#a8c9a5; --pasto-claro:#dfeadc;
+  --sol:#ffd54f; --sol-claro:#fff4cc; --linea:#e6d6c0;
+  --radio:22px; --sombra:0 14px 40px rgba(63,45,36,.13);
+  --ancho:1120px;
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { margin:0; background:var(--crema); color:var(--texto); font:400 1.0625rem/1.6 "Lectio Letra", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+img { max-width:100%; height:auto; display:block; }
+a { color:var(--musgo); }
+h1, h2, h3 { line-height:1.15; margin:0 0 .5em; color:var(--musgo); }
+h1 { font-size:clamp(2.2rem, 5.2vw, 3.6rem); letter-spacing:-.01em; }
+h2 { font-size:clamp(1.75rem, 3.6vw, 2.5rem); }
+h3 { font-size:1.3rem; }
+p { margin:0 0 1em; }
+.envoltura { max-width:var(--ancho); margin:0 auto; padding:0 20px; }
+.saltar { position:absolute; left:-999px; top:8px; background:var(--musgo); color:#fff; padding:8px 14px; border-radius:10px; z-index:10; }
+.saltar:focus { left:8px; }
+
+/* Cabecera */
+header.barra { position:sticky; top:0; z-index:5; background:rgba(250,243,232,.92); backdrop-filter:saturate(1.4) blur(8px); border-bottom:1px solid var(--linea); }
+.barra .envoltura { display:flex; align-items:center; gap:16px; height:64px; }
+.marca { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--musgo); font-weight:700; font-size:1.35rem; }
+.marca img { width:40px; height:40px; border-radius:11px; }
+.barra nav { margin-left:auto; display:flex; gap:22px; align-items:center; }
+.barra nav a { text-decoration:none; color:var(--texto); font-size:1rem; }
+.barra nav a:hover { color:var(--bosque); }
+.barra nav a.boton-play, .barra nav a.boton-play:hover { color:#fff; }
+@media (max-width:820px) { .barra nav a.opcional { display:none; } }
+
+/* Botones */
+.boton { display:inline-flex; align-items:center; gap:10px; padding:14px 24px; border-radius:999px; font-weight:700; text-decoration:none; font-size:1.075rem; transition:transform .15s ease, box-shadow .15s ease; }
+.boton:hover { transform:translateY(-2px); }
+.boton:focus-visible, a:focus-visible { outline:3px solid var(--sol); outline-offset:3px; }
+.boton-play { background:var(--musgo); color:#fff; box-shadow:0 8px 20px rgba(62,95,74,.3); }
+.boton-play svg { width:22px; height:22px; flex:none; }
+.boton-suave { background:var(--blanco); color:var(--musgo); border:2px solid var(--pasto); }
+.boton-chico { padding:9px 16px; font-size:.95rem; }
+
+/* Portada */
+.portada { position:relative; overflow:hidden; background:var(--pasto-claro); }
+.portada::before { content:""; position:absolute; inset:0; background:url("img/world_01_claro_bosque.webp") center 62%/cover no-repeat; opacity:.55; }
+.portada::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg, rgba(250,243,232,.97) 0%, rgba(250,243,232,.9) 42%, rgba(250,243,232,.25) 75%, rgba(250,243,232,0) 100%); }
+.portada .envoltura { position:relative; z-index:1; display:grid; grid-template-columns:1.1fr .9fr; align-items:center; gap:32px; padding-top:56px; padding-bottom:64px; }
+.etiqueta { display:inline-block; background:var(--sol-claro); color:var(--texto); border:1px solid #f3e1a0; padding:6px 14px; border-radius:999px; font-weight:700; font-size:.95rem; margin-bottom:18px; }
+.entrada { font-size:1.2rem; color:var(--suave); max-width:34em; }
+.acciones { display:flex; flex-wrap:wrap; gap:12px; margin:26px 0 22px; }
+.sellos { display:flex; flex-wrap:wrap; gap:8px 18px; padding:0; margin:0; list-style:none; color:var(--texto); font-size:.98rem; }
+.sellos li::before { content:"✓"; color:var(--bosque); font-weight:700; margin-right:6px; }
+.escena { position:relative; justify-self:center; }
+.luna-flota { position:absolute; width:150px; left:-86px; top:36px; filter:drop-shadow(0 10px 18px rgba(63,45,36,.18)); animation:flotar 5s ease-in-out infinite; }
+@keyframes flotar { 0%,100% { transform:translateY(0) rotate(-3deg); } 50% { transform:translateY(-12px) rotate(2deg); } }
+@media (prefers-reduced-motion:reduce) { .luna-flota { animation:none; } .boton:hover { transform:none; } html { scroll-behavior:auto; } }
+
+/* Teléfono */
+.telefono { width:min(300px, 72vw); border-radius:36px; padding:10px; background:#2f2622; box-shadow:var(--sombra); }
+.telefono img { border-radius:27px; aspect-ratio:9/16; object-fit:cover; object-position:top; width:100%; }
+.telefono.chico { width:min(230px, 62vw); border-radius:30px; padding:8px; }
+.telefono.chico img { border-radius:23px; }
+
+@media (max-width:860px) {
+  .portada::after { background:linear-gradient(180deg, rgba(250,243,232,.96) 0%, rgba(250,243,232,.9) 55%, rgba(250,243,232,.55) 100%); }
+  .portada .envoltura { grid-template-columns:1fr; padding-top:36px; }
+  .luna-flota { width:104px; left:-44px; top:18px; }
+}
+
+/* Secciones */
+section.bloque { padding:84px 0; }
+section.bloque.alterno { background:var(--arena); }
+.titular { max-width:44em; margin-bottom:40px; }
+.titular p { font-size:1.15rem; color:var(--suave); }
+.dos { display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center; }
+.dos.invertido > :first-child { order:2; }
+@media (max-width:860px) { .dos { grid-template-columns:1fr; gap:36px; } .dos.invertido > :first-child { order:0; } section.bloque { padding:64px 0; } }
+.lista { padding:0; margin:0 0 1em; list-style:none; }
+.lista li { position:relative; padding-left:34px; margin-bottom:12px; }
+.lista li::before { content:""; position:absolute; left:4px; top:.45em; width:16px; height:16px; border-radius:50%; background:var(--pasto); box-shadow:inset 0 0 0 4px var(--pasto-claro); }
+
+/* Etapas */
+.etapas { display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; }
+.etapa { background:var(--blanco); border:1px solid var(--linea); border-radius:var(--radio); padding:26px 22px; text-align:center; }
+.etapa img { width:96px; height:96px; margin:0 auto 12px; }
+.etapa p { color:var(--suave); margin:0; }
+@media (max-width:700px) { .etapas { grid-template-columns:1fr; } .etapa { display:grid; grid-template-columns:80px 1fr; gap:14px; text-align:left; align-items:center; } .etapa img { width:80px; height:80px; margin:0; } .etapa h3 { margin-bottom:.2em; } }
+
+/* Ejercicios */
+.ejercicios { display:grid; grid-template-columns:repeat(4, 1fr); gap:24px; }
+.ejercicios figure { margin:0; }
+.ejercicios .telefono { width:100%; }
+.ejercicios figcaption { text-align:center; margin-top:14px; font-weight:700; color:var(--texto); }
+.ejercicios figcaption span { display:block; font-weight:400; color:var(--suave); font-size:.97rem; }
+@media (max-width:960px) { .ejercicios { grid-template-columns:repeat(2, 1fr); } }
+@media (max-width:520px) {
+  .ejercicios { display:flex; overflow-x:auto; scroll-snap-type:x mandatory; gap:16px; margin:0 -20px; padding:4px 20px 12px; }
+  .ejercicios figure { flex:0 0 72%; scroll-snap-align:center; }
+}
+.ayuda { margin-top:36px; background:var(--sol-claro); border-radius:var(--radio); padding:22px 26px; display:flex; gap:18px; align-items:center; }
+.ayuda img { width:72px; height:72px; flex:none; }
+.ayuda p { margin:0; }
+
+/* Mundos */
+.mundos { display:grid; grid-template-columns:repeat(3, 1fr); gap:22px; }
+.mundo { position:relative; border-radius:var(--radio); overflow:hidden; min-height:340px; display:flex; align-items:flex-end; box-shadow:var(--sombra); }
+.mundo img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 70%; }
+.mundo div { position:relative; width:100%; padding:20px 22px; background:linear-gradient(180deg, rgba(42,36,32,0), rgba(42,36,32,.8) 38%); color:#fff; }
+.mundo h3 { color:#fff; margin-bottom:.15em; }
+.mundo p { margin:0; opacity:.95; }
+.pronto { margin-top:22px; color:var(--suave); }
+@media (max-width:860px) { .mundos { grid-template-columns:1fr; } .mundo { min-height:240px; } }
+
+/* Planes */
+.planes { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+.plan { background:var(--blanco); border:1px solid var(--linea); border-radius:var(--radio); padding:30px; }
+.plan.completo { border:2px solid var(--bosque); box-shadow:var(--sombra); }
+.plan .nota { color:var(--suave); font-size:.98rem; margin:0; }
+@media (max-width:760px) { .planes { grid-template-columns:1fr; } }
+
+/* Privacidad */
+.privacidad { background:var(--musgo); color:#f4efe6; border-radius:28px; padding:44px; display:grid; grid-template-columns:auto 1fr; gap:34px; align-items:center; }
+.privacidad h2 { color:#fff; }
+.privacidad img { width:150px; height:150px; background:rgba(255,255,255,.1); border-radius:50%; padding:10px; }
+.privacidad a { color:var(--sol); }
+.privacidad .lista li::before { background:var(--sol); box-shadow:inset 0 0 0 4px rgba(255,255,255,.25); }
+@media (max-width:760px) { .privacidad { grid-template-columns:1fr; padding:30px 24px; } .privacidad img { width:110px; height:110px; } }
+
+/* Cierre */
+.cierre { text-align:center; }
+.cierre img { width:150px; height:150px; margin:0 auto 12px; }
+.cierre .acciones { justify-content:center; }
+
+footer { background:var(--arena); border-top:1px solid var(--linea); padding:34px 0 40px; font-size:.97rem; color:var(--suave); }
+footer .envoltura { display:flex; flex-wrap:wrap; gap:10px 26px; align-items:center; }
+footer nav { display:flex; flex-wrap:wrap; gap:8px 20px; }
+footer .derechos { margin-left:auto; }
+@media (max-width:700px) { footer .derechos { margin-left:0; width:100%; } }
+</style>
+</head>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+
+<header class="barra">
+  <div class="envoltura">
+    <a class="marca" href="#"><img src="img/icono.webp" width="40" height="40" alt="">LECTIO</a>
+    <nav aria-label="Principal">
+      <a class="opcional" href="#como-aprende">Cómo aprende</a>
+      <a class="opcional" href="#mundos">Mundos</a>
+      <a class="opcional" href="#adultos">Para adultos</a>
+      <a class="boton boton-play boton-chico" href="https://play.google.com/store/apps/details?id=com.eduglat.lectio">Descargar</a>
+    </nav>
+  </div>
+</header>
+
+<main id="contenido">
+  <section class="portada">
+    <div class="envoltura">
+      <div>
+        <span class="etiqueta">Para niños y niñas de 4 a 7 años</span>
+        <h1>Aprende a leer en español con Luna</h1>
+        <p class="entrada">LECTIO acompaña a cada niño desde las vocales hasta leer palabras y frases, con un método silábico pensado en español y a su propio ritmo.</p>
+        <div class="acciones">
+          <a class="boton boton-play" href="https://play.google.com/store/apps/details?id=com.eduglat.lectio">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 3.5v17a1 1 0 0 0 1.5.86l14-8.5a1 1 0 0 0 0-1.72l-14-8.5A1 1 0 0 0 5 3.5Z"/></svg>
+            Descargar en Google Play
+          </a>
+          <a class="boton boton-suave" href="#como-aprende">Ver cómo funciona</a>
+        </div>
+        <ul class="sellos">
+          <li>Sin publicidad</li>
+          <li>Funciona sin internet</li>
+          <li>Los datos se quedan en el dispositivo</li>
+        </ul>
+      </div>
+      <div class="escena">
+        <img class="luna-flota" src="img/feliz.webp" width="512" height="512" alt="Luna, la luciérnaga que acompaña al niño">
+        <div class="telefono"><img src="img/01_mapa_claro.webp" width="540" height="960" alt="Mapa del Claro del Bosque con las primeras lecciones de vocales"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloque" id="como-aprende">
+    <div class="envoltura">
+      <div class="titular">
+        <h2>Aprender de verdad, no solo tocar rápido</h2>
+        <p>Cada letra y cada sílaba crece como una planta. Para avanzar, el niño practica en días distintos y con distintos tipos de ejercicio hasta dominarla. Si algo le cuesta, «Jugar con Luna» lo repasa.</p>
+      </div>
+      <div class="etapas">
+        <div class="etapa"><img src="img/semilla.webp" width="96" height="96" alt="" loading="lazy"><div><h3>Semilla</h3><p>La conoce por primera vez: la escucha y la ve.</p></div></div>
+        <div class="etapa"><img src="img/brote.webp" width="96" height="96" alt="" loading="lazy"><div><h3>Brote</h3><p>La practica en otros ejercicios y en otros días.</p></div></div>
+        <div class="etapa"><img src="img/flor.webp" width="96" height="96" alt="" loading="lazy"><div><h3>Flor</h3><p>La domina y la usa para leer palabras nuevas.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloque alterno" id="ejercicios">
+    <div class="envoltura">
+      <div class="titular">
+        <h2>Escuchar, ver y hacer</h2>
+        <p>Luna habla con voz natural. El niño escucha los sonidos, arma palabras con fichas, traza las letras con el dedo y ordena frases.</p>
+      </div>
+      <div class="ejercicios">
+        <figure><div class="telefono"><img src="img/03_escuchar_silaba.webp" width="540" height="960" alt="Ejercicio: escucha y toca la sílaba que oyes, entre TI, TE y TA" loading="lazy"></div><figcaption>Escuchar<span>y elegir la sílaba que oye</span></figcaption></figure>
+        <figure><div class="telefono"><img src="img/04_armar_palabra.webp" width="540" height="960" alt="Ejercicio: escucha y arma la palabra MULA con fichas" loading="lazy"></div><figcaption>Armar<span>palabras con fichas</span></figcaption></figure>
+        <figure><div class="telefono"><img src="img/05_trazar_letra.webp" width="540" height="960" alt="Ejercicio: traza la letra D con el dedo" loading="lazy"></div><figcaption>Trazar<span>las letras con el dedo</span></figcaption></figure>
+        <figure><div class="telefono"><img src="img/06_ordenar_frase.webp" width="540" height="960" alt="Ejercicio: escucha la frase y ordena sus palabras" loading="lazy"></div><figcaption>Leer<span>y ordenar frases</span></figcaption></figure>
+      </div>
+      <div class="ayuda">
+        <img src="img/pensando.webp" width="72" height="72" alt="" loading="lazy">
+        <p><strong>Si se equivoca, Luna le ayuda.</strong> Puede escuchar más despacio, quitar una opción o ver un dibujo que empieza igual. Nunca pierde lo que ya ganó.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloque" id="mundos">
+    <div class="envoltura">
+      <div class="titular">
+        <h2>Mundos para explorar</h2>
+        <p>Cada mundo trae letras nuevas y un paisaje propio.</p>
+      </div>
+      <div class="mundos">
+        <article class="mundo"><img src="img/world_01_claro_bosque.webp" width="720" height="1290" alt="" loading="lazy"><div><h3>El Claro del Bosque</h3><p>Vocales, M, P, S y L</p></div></article>
+        <article class="mundo"><img src="img/world_02_cueva_cristales.webp" width="720" height="1290" alt="" loading="lazy"><div><h3>La Cueva de los Cristales</h3><p>T, D y N</p></div></article>
+        <article class="mundo"><img src="img/world_03_rio_cantarin.webp" width="720" height="1290" alt="" loading="lazy"><div><h3>El Río Cantarín</h3><p>C, F y B</p></div></article>
+      </div>
+      <p class="pronto">Vendrán más mundos con todo el abecedario, sílabas trabadas y cuentos.</p>
+    </div>
+  </section>
+
+  <section class="bloque alterno" id="jardin">
+    <div class="envoltura dos invertido">
+      <div class="telefono"><img src="img/07_jardin.webp" width="540" height="960" alt="Jardín mágico decorado con un árbol, flores, un conejo, una fuente y una mariposa" loading="lazy"></div>
+      <div>
+        <h2>Su propio jardín mágico</h2>
+        <p>Con las semillas que gana jugando, el niño planta árboles, flores, animalitos y una fuente en su jardín.</p>
+        <p>Es una recompensa tranquila: no hay rachas que se pierdan ni prisas. Si un día no juega, no pierde nada.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloque" id="adultos">
+    <div class="envoltura dos">
+      <div>
+        <h2>Para los adultos</h2>
+        <p>Un panel protegido, al que el niño no entra, muestra cómo va:</p>
+        <ul class="lista">
+          <li>Qué letras y sílabas domina y cuáles confunde, como las letras en espejo o los sonidos parecidos.</li>
+          <li>Qué ayudas le sirven más y cuánto juega cada día.</li>
+          <li>Un informe en PDF para compartir con el colegio.</li>
+          <li>Un límite diario de juego y un recordatorio opcional.</li>
+          <li>Hasta 6 perfiles, uno para cada niño de la casa.</li>
+        </ul>
+      </div>
+      <div class="telefono"><img src="img/08_panel_resumen.webp" width="540" height="960" alt="Panel de adultos con los días de juego y las últimas sesiones" loading="lazy"></div>
+    </div>
+  </section>
+
+  <section class="bloque alterno" id="planes">
+    <div class="envoltura">
+      <div class="titular">
+        <h2>Empieza gratis</h2>
+        <p>Descárgala y juega sin pagar. Si le gusta, LECTIO Completo abre todo lo demás.</p>
+      </div>
+      <div class="planes">
+        <div class="plan">
+          <h3>Gratis</h3>
+          <ul class="lista">
+            <li>El Claro del Bosque completo: vocales, M, P, S y L.</li>
+            <li>El comienzo de la Cueva de los Cristales.</li>
+            <li>Un perfil.</li>
+          </ul>
+        </div>
+        <div class="plan completo">
+          <h3>LECTIO Completo</h3>
+          <ul class="lista">
+            <li>Todos los mundos, también los que vendrán.</li>
+            <li>Hasta 6 perfiles.</li>
+            <li>El informe en PDF.</li>
+          </ul>
+          <p class="nota">Suscripción anual con 7 días gratis, mensual o compra única para siempre. Las compras solo aparecen en el panel de adultos, nunca al niño.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloque" id="privacidad">
+    <div class="envoltura">
+      <div class="privacidad">
+        <img src="img/icono.webp" width="150" height="150" alt="" loading="lazy">
+        <div>
+          <h2>Segura y sin distracciones</h2>
+          <ul class="lista">
+            <li>Sin publicidad, sin analítica y sin seguimiento.</li>
+            <li>Sin cuentas: los datos del niño se quedan en el dispositivo.</li>
+            <li>El juego funciona sin conexión a internet.</li>
+          </ul>
+          <p>Lee la <a href="https://eduglat.github.io/lectio-privacidad/">política de privacidad</a> y los <a href="https://eduglat.github.io/lectio-privacidad/terminos.html">términos del servicio</a>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloque alterno cierre">
+    <div class="envoltura">
+      <img src="img/animando.webp" width="150" height="150" alt="" loading="lazy">
+      <h2>Luna te espera en el bosque</h2>
+      <p>Descarga LECTIO y empieza hoy con las vocales.</p>
+      <div class="acciones">
+        <a class="boton boton-play" href="https://play.google.com/store/apps/details?id=com.eduglat.lectio">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 3.5v17a1 1 0 0 0 1.5.86l14-8.5a1 1 0 0 0 0-1.72l-14-8.5A1 1 0 0 0 5 3.5Z"/></svg>
+          Descargar en Google Play
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="envoltura">
+    <nav aria-label="Legal">
+      <a href="mailto:eduglat@gmail.com">Contacto: eduglat@gmail.com</a>
+      <a href="https://eduglat.github.io/lectio-privacidad/">Privacidad</a>
+      <a href="https://eduglat.github.io/lectio-privacidad/terminos.html">Términos</a>
+    </nav>
+    <span class="derechos">© 2026 Sadid Latandret · Colombia</span>
+  </div>
+</footer>
+</body>
+</html>

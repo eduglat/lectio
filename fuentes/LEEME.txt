@@ -1,0 +1,5 @@
+lectio-letra-regular.woff2 y lectio-letra-bold.woff2 son subconjuntos (solo
+caracteres latinos y del español) de la fuente Andika de SIL International,
+convertidos a WOFF2 para la web. Como «Andika» es un nombre reservado por la
+licencia, la versión modificada se llama «Lectio Letra».
+Licencia: SIL Open Font License 1.1 (OFL.txt).
